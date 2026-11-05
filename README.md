@@ -98,7 +98,7 @@ De server volgt de branch die op `/srv/cursus` is uitgecheckt. Een herstart van 
 | `larixa docent-wachtwoord` | Docentwachtwoord instellen. Oude docentsessies worden uitgelogd. |
 | `larixa controleer` | `missies.json` controleren na een wijziging. |
 
-Op `/docent/` zie je per klas de voortgang. Bovenaan staat wat op jou wacht, zoals een procesanalyse die je nog moet afvinken. Je kunt ook stickers geven (Herhaalbaar, Feniks, Schoon, Kluis) en de voortgang exporteren als CSV.
+Op `/docent/` maak je klassen aan, zie je de klascodes en zet je aanmelden open of dicht. Daaronder zie je per klas de voortgang. Bovenaan staat wat op jou wacht, zoals een procesanalyse die je nog moet afvinken. Je kunt ook stickers geven (Herhaalbaar, Feniks, Schoon, Kluis) en de voortgang exporteren als CSV.
 
 ## Missies en teksten aanpassen
 

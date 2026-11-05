@@ -10,6 +10,24 @@ body.docent { background: var(--papier-2); color: var(--inkt); }
 .docent h1 { margin: 0 0 1rem; font-size: 1.6rem; }
 .docent h2 { margin: 2rem 0 0.5rem; font-size: 1.2rem; }
 
+.klassen-tabel { width: auto; min-width: min(100%, 40rem); background: var(--papier); }
+.klassen-tabel td, .klassen-tabel th { vertical-align: middle; }
+.klassen-tabel tr.nieuw { outline: 3px solid var(--goud); outline-offset: -3px; }
+.klascode { margin-right: 0.6rem; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.08em; }
+
+.nieuwe-klas { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 1rem 0 2.5rem; }
+.nieuwe-klas label { width: 100%; font-weight: 700; }
+.nieuwe-klas input {
+  flex: 0 1 20rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.6rem;
+  border: 2px solid var(--inkt);
+  border-radius: 2px;
+  background: #fff;
+  color: var(--inkt);
+}
+.nieuwe-klas .melding { width: 100%; margin: 0; }
+
 .klaskeuze { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 .klaskeuze .knop[aria-selected="true"] { background: var(--goud); }
 

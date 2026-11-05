@@ -33,7 +33,16 @@
     </section>
 
     <section id="overzicht" hidden aria-labelledby="overzicht-kop">
-      <h1 id="overzicht-kop">Voortgang</h1>
+      <h1 id="overzicht-kop">Klassen</h1>
+      <div id="klassen"></div>
+      <form id="nieuwe-klas" class="nieuwe-klas">
+        <label for="klasnaam">Nieuwe klas</label>
+        <input id="klasnaam" name="naam" maxlength="60" placeholder="Bijvoorbeeld 4ICT-A 2026" autocomplete="off" required>
+        <button type="submit" class="knop knop-hoofd">Klas aanmaken</button>
+        <p class="melding" id="klas-melding" role="status"></p>
+      </form>
+
+      <h1>Voortgang</h1>
       <div class="klaskeuze" id="klaskeuze" role="tablist" aria-label="Klassen"></div>
       <div id="klas"></div>
     </section>
