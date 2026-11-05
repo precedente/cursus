@@ -1,0 +1,53 @@
+/* Docentoverzicht: dezelfde huisstijl, maar rustiger. Papier op de achtergrond. */
+
+body.docent { background: var(--papier-2); color: var(--inkt); }
+
+.docent-main { width: min(100%, 90rem); margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+.docent-login { margin: 3rem auto; }
+.docent-login form { display: grid; gap: 0.35rem; margin: 1rem 0; }
+
+.docent h1 { margin: 0 0 1rem; font-size: 1.6rem; }
+.docent h2 { margin: 2rem 0 0.5rem; font-size: 1.2rem; }
+
+.klaskeuze { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.klaskeuze .knop[aria-selected="true"] { background: var(--goud); }
+
+.klasinfo { margin: 0 0 1rem; color: var(--grijs); }
+
+.wachtrij { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.wachtrij li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--papier);
+  border: 2px solid var(--inkt);
+  border-left: 8px solid var(--hesje);
+}
+.wachtrij li span { flex: 1 1 16rem; }
+
+.voortgang-tabel { background: var(--papier); font-size: 0.875rem; }
+.voortgang-tabel th, .voortgang-tabel td { padding: 0.3rem 0.4rem; text-align: center; white-space: nowrap; }
+.voortgang-tabel tbody th { text-align: left; font-family: var(--mono); }
+.voortgang-tabel thead th abbr { text-decoration: none; cursor: help; }
+.voortgang-tabel .vak {
+  min-width: 4.2rem;
+  min-height: 1.9rem;
+  padding: 0.1rem 0.35rem;
+  border: 2px solid var(--inkt);
+  border-radius: 2px;
+  background: var(--papier-2);
+  color: var(--inkt);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.voortgang-tabel .vak.klaar { background: var(--lariks-licht); color: #fff; }
+.voortgang-tabel .vak.open { background: var(--goud-licht); }
+.voortgang-tabel .vak.dicht { background: transparent; color: var(--grijs); font-weight: 400; }
+.voortgang-tabel .nvt { color: var(--grijs); }
+.voortgang-tabel .scheiding { border-left: 4px solid var(--inkt); }
+
+.legenda { color: var(--grijs); font-size: 0.875rem; }

@@ -1,0 +1,26 @@
+# systemd-service voor de Larixa-API.
+# Installeren: sudo cp deploy/larixa-api.service /etc/systemd/system/
+#              sudo systemctl daemon-reload && sudo systemctl enable --now larixa-api
+
+[Unit]
+Description=Larixa-API voor cursus.gloudemansict.nl
+After=network.target
+
+[Service]
+User=larixa
+Group=larixa
+Environment=LARIXA_DATA=/var/lib/larixa
+ExecStart=/usr/bin/python3 /srv/cursus/api/larixa.py serve --host 127.0.0.1 --port 8081
+Restart=on-failure
+StateDirectory=larixa
+StateDirectoryMode=0700
+
+# Afscherming. Geeft een LXC-container op Proxmox een fout over namespaces?
+# Zet dan nesting aan voor de container, of haal deze regels weg.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

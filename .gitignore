@@ -1,0 +1,5 @@
+# Gegevens van studenten en het servergeheim horen nooit in de repository.
+data/
+*.sqlite3*
+geheim.key
+__pycache__/

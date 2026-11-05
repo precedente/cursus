@@ -1,0 +1,331 @@
+{
+  "cursus": "Processen automatiseren (P2-K1-W2)",
+  "bedrijf": "Larixa Logistiek",
+  "personages": {
+    "samira": { "naam": "Samira de Wit", "rol": "teamleider IT" },
+    "noor": { "naam": "Noor Bakker", "rol": "kwaliteit en processen" },
+    "ruben": { "naam": "Ruben Smit", "rol": "planning" }
+  },
+  "fases": [
+    { "id": "hand", "naam": "Met de hand", "ruimte": "werkplek" },
+    { "id": "analyseren", "naam": "Analyseren", "ruimte": "vergaderzaal" },
+    { "id": "automatiseren", "naam": "Automatiseren", "ruimte": "serverruimte" },
+    { "id": "verbeteren", "naam": "Verbeteren", "ruimte": "serverruimte" },
+    { "id": "opleveren", "naam": "Opleveren", "ruimte": "vergaderzaal" }
+  ],
+  "sporen": {
+    "linux": { "naam": "Linux", "uitleg": "Ubuntu Server met autoinstall en Ansible" },
+    "windows": { "naam": "Windows", "uitleg": "Windows Server met een antwoordbestand en PowerShell" }
+  },
+  "codeinstructie": {
+    "linux": [
+      "Log in op {SERVER} en haal het checkscript op: `curl -fsSLO {BASIS}/lab/larixa-check.sh`",
+      "Lees eerst wat het script doet: `less larixa-check.sh`. Het kijkt alleen en verandert niets.",
+      "Start de controle: `sudo bash larixa-check.sh {MISSIE}`",
+      "Alles groen? Dan krijg je een code. Typ die hieronder in."
+    ],
+    "windows": [
+      "Open PowerShell als administrator op {SERVER} en haal het checkscript op: `Invoke-WebRequest {BASIS}/lab/larixa-check.ps1 -OutFile larixa-check.ps1`",
+      "Lees eerst wat het script doet: `notepad larixa-check.ps1`. Het kijkt alleen en verandert niets.",
+      "Geef het script toestemming: `Unblock-File .\\larixa-check.ps1`",
+      "Start de controle: `.\\larixa-check.ps1 {MISSIE}`",
+      "Alles groen? Dan krijg je een code. Typ die hieronder in."
+    ]
+  },
+  "missies": [
+    {
+      "id": "m1",
+      "week": 1,
+      "fase": "hand",
+      "van": "samira",
+      "soort": "lab",
+      "titel": "Een server met de hand",
+      "na": [],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "Welkom bij Larixa! Fijn dat je er bent. We installeren servers nu nog met de hand. Dat duurt lang, en geen twee servers worden hetzelfde. Voordat we dat veranderen, wil ik weten hoe lang het nu duurt. Installeer één server met de hand. Houd bij hoeveel tijd het kost, welke stappen je zet en wat er misgaat.",
+      "stappen": {
+        "linux": [
+          "Zet een stopwatch aan. Installeer Ubuntu Server op web01, helemaal met de hand.",
+          "Geef de server de naam web01 en het vaste IP-adres 192.168.150.21.",
+          "Zet de tijdzone op Amsterdam: `sudo timedatectl set-timezone Europe/Amsterdam`",
+          "Zet je labsleutel op de server: `sudo mkdir -p /etc/larixa` en daarna `echo {LABSLEUTEL} | sudo tee /etc/larixa/labsleutel`",
+          "Stop de stopwatch. Schrijf de tijd, je stappen en wat er misging op in eJournal."
+        ],
+        "windows": [
+          "Zet een stopwatch aan. Installeer Windows Server 2025 op win01, helemaal met de hand.",
+          "Geef de server de naam WIN01 en het vaste IP-adres 192.168.150.31.",
+          "Zet de tijdzone op Amsterdam: `Set-TimeZone -Id 'W. Europe Standard Time'`",
+          "Zet je labsleutel op de server: `New-Item C:\\Larixa -ItemType Directory -Force` en daarna `Set-Content C:\\Larixa\\labsleutel.txt '{LABSLEUTEL}'`",
+          "Stop de stopwatch. Schrijf de tijd, je stappen en wat er misging op in eJournal."
+        ]
+      },
+      "klaar": "Top, je eerste server staat. Vergeet je meetrapport niet. Noor wil je cijfers straks zien."
+    },
+    {
+      "id": "m2",
+      "week": 1,
+      "fase": "hand",
+      "van": "samira",
+      "soort": "docent",
+      "titel": "Meetrapport 1",
+      "na": ["m1"],
+      "bericht": "Hoe ging het? Ik ben benieuwd naar je cijfers. Zet je meetrapport in eJournal: hoe lang duurde het, welke stappen zette je en wat ging er mis? Dit is straks je vergelijking. Hoe eerlijker je nu meet, hoe mooier je verbetering later.",
+      "stappen": {
+        "alle": [
+          "Zet in eJournal hoe lang de installatie duurde, van start tot een werkende server.",
+          "Zet al je stappen op een rij, ook het wachten en het opzoeken.",
+          "Schrijf op wat er misging en hoe je het oploste.",
+          "Laat het rapport aan je docent zien. Je docent vinkt deze missie af."
+        ]
+      },
+      "klaar": "Je meetrapport is binnen. Dit is ons startpunt."
+    },
+    {
+      "id": "m3",
+      "week": 2,
+      "fase": "analyseren",
+      "van": "noor",
+      "soort": "docent",
+      "titel": "Waar gaat de tijd heen?",
+      "na": ["m1"],
+      "bericht": "Hoi, ik ben Noor. Ik let bij Larixa op hoe we werken. Samira zegt dat jij een server met de hand hebt geïnstalleerd. Mooi, want nu zien we waar de tijd heen gaat. Welke stappen voegen echt iets toe? En welke zijn wachten, zoeken of overdoen? Kom even bij me in de vergaderzaal.",
+      "stappen": {
+        "alle": [
+          "Zet de stappen uit je meetrapport in een processchema.",
+          "Geef bij elke stap aan of die waarde toevoegt of verspilling is. Gebruik de soorten verspilling uit de les.",
+          "Kies welke stappen je gaat automatiseren. Leg uit waarom.",
+          "Zet je procesanalyse in eJournal. Je docent geeft feedback en vinkt deze missie af."
+        ]
+      },
+      "klaar": "Sterke analyse. Nu weet je precies wat je gaat automatiseren. Samira wacht op je in de serverruimte."
+    },
+    {
+      "id": "m4",
+      "week": 3,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "lab",
+      "titel": "Installeren zonder vragen",
+      "na": ["m3"],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "Goed werk met de analyse. Nu doen we het echt anders. Een installatie mag geen vragen meer stellen. Alles wat jij de vorige keer intypte, staat straks in één bestand. Jij start de installatie, de server doet de rest. En jij haalt koffie.",
+      "stappen": {
+        "linux": [
+          "Maak een autoinstall-bestand (user-data) in YAML. Gebruik het sjabloon uit Canvas als je dat wilt.",
+          "Zet in het bestand de naam web01, het IP-adres 192.168.150.21 en de tijdzone Europe/Amsterdam.",
+          "Laat het bestand ook twee bestanden op de server zetten: /etc/larixa/labsleutel met `{LABSLEUTEL}`, en /etc/larixa/bouwinfo met de regel `methode=autoinstall`.",
+          "Maak een seed.iso met `cloud-localds seed.iso user-data meta-data` en koppel die als tweede cd aan web01.",
+          "Installeer web01 opnieuw. Je mag alleen de vraag 'Continue with autoinstall?' beantwoorden."
+        ],
+        "windows": [
+          "Maak een antwoordbestand Autounattend.xml, bijvoorbeeld met Windows SIM.",
+          "Zet in het bestand de naam WIN01, het IP-adres 192.168.150.31 en de tijdzone W. Europe Standard Time.",
+          "Laat het bestand ook twee bestanden op de server zetten: C:\\Larixa\\labsleutel.txt met `{LABSLEUTEL}`, en C:\\Larixa\\bouwinfo.txt met de regel `methode=antwoordbestand`.",
+          "Zet Autounattend.xml in de hoofdmap van een tweede iso en koppel die aan win01.",
+          "Installeer win01 opnieuw, zonder iets in te typen."
+        ]
+      },
+      "tip": {
+        "linux": "In late-commands schrijf je naar /target, bijvoorbeeld `mkdir -p /target/etc/larixa` en `echo methode=autoinstall > /target/etc/larixa/bouwinfo`.",
+        "windows": "Kies in VMware 'I will install the operating system later', anders zet VMware er een eigen antwoordbestand naast. Opdrachten na de installatie zet je in FirstLogonCommands of in RunSynchronous."
+      },
+      "klaar": "Geen enkele vraag meer. Zo wil ik het. Nu moet de server nog iets doen."
+    },
+    {
+      "id": "m5",
+      "week": 4,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "lab",
+      "titel": "De eerste inrichting",
+      "na": ["m4"],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "De installatie gaat vanzelf. Maar een kale server doet nog niks. Planning wil een eigen webpagina. Richt de server in met code, niet met de hand. Dan kunnen we het morgen precies zo opnieuw doen.",
+      "stappen": {
+        "linux": [
+          "Maak op ctrl01 een inventory met web01 erin.",
+          "Schrijf een playbook dat nginx installeert, start en aanzet bij het opstarten.",
+          "Laat het playbook een eigen startpagina neerzetten in /var/www/html/index.html. Je labsleutel `{LABSLEUTEL}` moet op de pagina staan.",
+          "Zet de labsleutel in een variabele, niet los in de pagina.",
+          "Draai het playbook vanaf ctrl01."
+        ],
+        "windows": [
+          "Schrijf een PowerShell-script dat de webserverrol IIS installeert.",
+          "Laat het script een eigen startpagina maken in C:\\inetpub\\wwwroot\\index.html. Je labsleutel `{LABSLEUTEL}` moet op de pagina staan.",
+          "Zet de labsleutel in een variabele, niet los in de pagina.",
+          "Draai het script op win01."
+        ]
+      },
+      "klaar": "Planning heeft hun pagina. Ruben stuurde al drie smileys."
+    },
+    {
+      "id": "m6",
+      "week": 5,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "lab",
+      "titel": "Op slot",
+      "na": ["m5"],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "De pagina draait. Nu de beveiliging nog. Ik wil een eigen account op de server, en alleen het verkeer dat echt nodig is. Breid je automatisering uit. En let op: geen wachtwoorden leesbaar in je code.",
+      "stappen": {
+        "linux": [
+          "Laat je playbook de gebruiker samira aanmaken, met een SSH-sleutel.",
+          "Zet inloggen met een wachtwoord via SSH uit.",
+          "Zet de firewall ufw aan. Blokkeer standaard al het inkomende verkeer en sta alleen SSH en HTTP toe.",
+          "Installeer unattended-upgrades, voor automatische updates.",
+          "Staat er een geheim in je playbook? Zet het in Ansible Vault."
+        ],
+        "windows": [
+          "Laat je script de lokale gebruiker samira aanmaken. Vraag het wachtwoord bij het uitvoeren, zet het niet in het script.",
+          "Zet de Windows Firewall aan voor alle profielen.",
+          "Maak een firewallregel met de naam `Larixa HTTP` die poort 80 toestaat.",
+          "Laat PSScriptAnalyzer je script controleren en los de meldingen op."
+        ]
+      },
+      "klaar": "Dicht en netjes. Precies zo."
+    },
+    {
+      "id": "m7",
+      "week": 6,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "lab",
+      "titel": "Bouwt de server zichzelf op?",
+      "na": ["m6"],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "Tijd voor de echte test. Gooi je server weg en bouw hem opnieuw op. Installatie en inrichting in één keer, zonder dat jij iets met de hand doet. Lukt dat? Dan doen we het voortaan bij elke nieuwe server zo.",
+      "stappen": {
+        "linux": [
+          "Verwijder web01 in VMware en maak een nieuwe, lege VM.",
+          "Installeer de server met je autoinstall-bestand.",
+          "Draai daarna je playbook. Typ niets met de hand op de server.",
+          "Laat de demo zien aan een medestudent: bouwt de server zichzelf op?"
+        ],
+        "windows": [
+          "Verwijder win01 in VMware en maak een nieuwe, lege VM.",
+          "Installeer de server met je antwoordbestand.",
+          "Laat het antwoordbestand je script starten, of start het in één keer na de installatie. Typ verder niets met de hand.",
+          "Laat de demo zien aan een medestudent: bouwt de server zichzelf op?"
+        ]
+      },
+      "klaar": "Weggegooid en weer opgebouwd. Dit is precies wat ik wilde."
+    },
+    {
+      "id": "m8",
+      "week": 7,
+      "fase": "verbeteren",
+      "van": "ruben",
+      "soort": "lab",
+      "titel": "Wie heeft hieraan gezeten?",
+      "na": ["m7"],
+      "server": { "linux": "web01", "windows": "win01" },
+      "bericht": "Eh... hoi. Ik ben Ruben, van planning. Ik wilde gisteren even snel iets aanpassen op de webserver. Nu doet de pagina raar en Samira kijkt boos. Kun jij het terugzetten? Liefst voordat iemand het merkt.",
+      "stappen": {
+        "linux": [
+          "Doe eerst na wat Ruben deed. Haal zijn script op met `curl -fsSLO {BASIS}/lab/ruben.sh`, lees het en draai het op web01: `sudo bash ruben.sh`",
+          "Zoek uit wat er mis is. Wat is er veranderd?",
+          "Herstel alles met je eigen playbook. Niet met de hand!",
+          "Draai je playbook nog een keer. Verandert er nu nog iets?",
+          "Schrijf in je testverslag wat er gebeurde en hoe je automatisering het oploste."
+        ],
+        "windows": [
+          "Doe eerst na wat Ruben deed. Haal zijn script op met `Invoke-WebRequest {BASIS}/lab/ruben.ps1 -OutFile ruben.ps1`, lees het en draai het op win01.",
+          "Zoek uit wat er mis is. Wat is er veranderd?",
+          "Herstel alles met je eigen script. Niet met de hand!",
+          "Draai je script nog een keer. Gaat dat zonder fouten?",
+          "Schrijf in je testverslag wat er gebeurde en hoe je automatisering het oploste."
+        ]
+      },
+      "klaar": "Pfoe. Hij doet het weer. Ik raak die server nooit meer aan. Beloofd."
+    },
+    {
+      "id": "m9",
+      "week": 8,
+      "fase": "verbeteren",
+      "van": "noor",
+      "soort": "docent",
+      "titel": "De tweede meting",
+      "na": ["m8"],
+      "bericht": "Je server bouwt zichzelf op. Maar hoeveel sneller is het nu echt? Meet een volledige herbouw, net als in week 1. Dan leggen we de twee metingen naast elkaar.",
+      "stappen": {
+        "alle": [
+          "Meet een volledige herbouw: tijd, stappen en fouten.",
+          "Vergelijk de meting met je meetrapport uit week 1.",
+          "Maak je README af: wat doet je automatisering, hoe start je haar en hoe pas je haar aan?",
+          "Laat een medestudent je code nakijken en draai de lintcontrole.",
+          "Zet meetrapport 2 in eJournal. Je docent vinkt deze missie af."
+        ]
+      },
+      "klaar": "Zwart op wit: sneller en zonder fouten. Dit wil Samira horen."
+    },
+    {
+      "id": "m10",
+      "week": 9,
+      "fase": "opleveren",
+      "van": "samira",
+      "soort": "docent",
+      "titel": "De demo",
+      "na": ["m9"],
+      "bericht": "Het is zover. Laat mij en het team zien wat je hebt gebouwd. Vertel wat het Larixa oplevert, met je metingen erbij. Vijf tot tien minuten is genoeg. Ik zorg voor koffie.",
+      "stappen": {
+        "alle": [
+          "Bereid een demo voor van 5 tot 10 minuten.",
+          "Laat zien hoe de server zichzelf opbouwt.",
+          "Vergelijk voor en na, met je eigen metingen.",
+          "Doe één verbetervoorstel voor Larixa.",
+          "Je docent beoordeelt je eindproduct in Canvas en vinkt deze missie af."
+        ]
+      },
+      "klaar": "Dank je. Vanaf nu bouwen we elke server zo. Welkom in het team."
+    },
+    {
+      "id": "z1",
+      "week": 6,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "lab",
+      "zij": true,
+      "sporen": ["linux"],
+      "titel": "Nog een server",
+      "na": ["m7"],
+      "server": { "linux": "web02" },
+      "bericht": "Planning is blij. Nu wil de klantenservice dezelfde pagina. Kun je een tweede server bouwen, met hetzelfde playbook? Dit is een extra missie. Je hebt hem niet nodig voor een voldoende.",
+      "stappen": {
+        "linux": [
+          "Maak web02 met het IP-adres 192.168.150.22, met je autoinstall-bestand.",
+          "Zet web02 in je inventory en draai hetzelfde playbook.",
+          "Pas het playbook niet aan voor web02 alleen. Moet er iets verschillen? Gebruik dan een variabele."
+        ]
+      },
+      "klaar": "Twee servers, één playbook. Zo schaal je op."
+    },
+    {
+      "id": "z2",
+      "week": 6,
+      "fase": "automatiseren",
+      "van": "samira",
+      "soort": "docent",
+      "zij": true,
+      "sporen": ["windows"],
+      "titel": "Windows met Ansible",
+      "na": ["m7"],
+      "bericht": "Je PowerShell-script werkt. Kan Ansible dat ook, vanaf ctrl01? Dan beheren we Linux en Windows op één manier. Dit is een extra missie. Je hebt hem niet nodig voor een voldoende.",
+      "stappen": {
+        "alle": [
+          "Zet WinRM aan op win01.",
+          "Zet win01 in een inventory op ctrl01.",
+          "Richt IIS in met een playbook en de modules uit ansible.windows.",
+          "Laat het resultaat aan je docent zien. Je docent vinkt deze missie af."
+        ]
+      },
+      "klaar": "Eén tool voor alles. Mooi."
+    }
+  ],
+  "badges": [
+    { "id": "herhaalbaar", "naam": "Herhaalbaar", "uitleg": "Een tweede run verandert niets." },
+    { "id": "feniks", "naam": "Feniks", "uitleg": "Server weggegooid en opnieuw opgebouwd." },
+    { "id": "schoon", "naam": "Schoon", "uitleg": "Geen meldingen van de lintcontrole." },
+    { "id": "kluis", "naam": "Kluis", "uitleg": "Geheimen versleuteld of buiten de code." }
+  ]
+}
