@@ -1,0 +1,8 @@
+[Unit]
+Description=cursus.gloudemansict.nl bijwerken vanaf GitHub
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /srv/cursus/deploy/cursus-update.sh
