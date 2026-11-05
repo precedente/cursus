@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docentoverzicht Larixa</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/spel.css">
+  <link rel="stylesheet" href="/assets/docent.css">
+  <script type="module" src="/assets/docent.js"></script>
+</head>
+<body class="docent">
+  <header class="balk">
+    <a class="merk" href="/docent/">Larixa Logistiek, docentoverzicht</a>
+    <nav class="knoppen" aria-label="Docent">
+      <button type="button" id="ververs" class="knop" hidden>Vernieuwen</button>
+      <button type="button" id="export" class="knop" hidden>Exporteren als CSV</button>
+      <button type="button" id="uitloggen" class="knop knop-stil" hidden>Uitloggen</button>
+    </nav>
+  </header>
+
+  <main class="docent-main">
+    <section id="inloggen" class="aanmelden-kaart docent-login" hidden aria-labelledby="inlog-kop">
+      <h1 id="inlog-kop">Inloggen als docent</h1>
+      <form id="inlogformulier">
+        <label for="wachtwoord">Docentwachtwoord</label>
+        <input id="wachtwoord" type="password" autocomplete="current-password" required>
+        <p class="melding" id="inlog-melding" role="alert"></p>
+        <button type="submit" class="knop knop-hoofd">Inloggen</button>
+      </form>
+      <p class="klein">Het wachtwoord stel je op de server in met <code>python3 larixa.py docent-wachtwoord</code>.</p>
+    </section>
+
+    <section id="overzicht" hidden aria-labelledby="overzicht-kop">
+      <h1 id="overzicht-kop">Voortgang</h1>
+      <div class="klaskeuze" id="klaskeuze" role="tablist" aria-label="Klassen"></div>
+      <div id="klas"></div>
+    </section>
+  </main>
+</body>
+</html>

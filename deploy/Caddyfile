@@ -1,0 +1,36 @@
+# Site-blok voor cursus.gloudemansict.nl. Zet dit in de Caddyfile van je webserver.
+# Draait de API in een andere container dan Caddy? Vervang 127.0.0.1 door het IP-adres
+# van die container, en laat de API daar luisteren met --host 0.0.0.0 achter een firewall.
+
+cursus.gloudemansict.nl {
+	encode zstd gzip
+
+	# De API van het spel
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8081
+	}
+
+	# Het spel zelf: alleen statische bestanden
+	handle {
+		root * /srv/cursus/web
+		file_server
+	}
+
+	header {
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Strict-Transport-Security "max-age=31536000"
+		X-Robots-Tag "noindex, nofollow"
+		-Server
+	}
+
+	# Checkscripts als leesbare tekst, zodat studenten ze in de browser kunnen lezen
+	@lab path /lab/*
+	header @lab Content-Type "text/plain; charset=utf-8"
+
+	# Na een update meteen de nieuwe versie van het spel
+	@spel path /assets/* /data/* /index.html /
+	header @spel Cache-Control "no-cache"
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Larixa Logistiek</title>
+  <meta name="description" content="Het kantoorspel bij de cursus Processen automatiseren: missies, theorie en je voortgang.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/spel.css">
+  <script type="module" src="/assets/spel.js"></script>
+</head>
+<body>
+  <header class="balk">
+    <a class="merk" href="/" aria-label="Larixa Logistiek, naar het begin">
+      <canvas class="merk-icoon" width="16" height="16" aria-hidden="true"></canvas>
+      <span>Larixa Logistiek</span>
+    </a>
+    <p class="ruimte" id="ruimte-naam" aria-live="polite"></p>
+    <nav class="knoppen" aria-label="Spel">
+      <button type="button" id="knop-planbord" class="knop" hidden>Planbord</button>
+      <button type="button" id="knop-handboek" class="knop">Handboek</button>
+      <button type="button" id="knop-afmelden" class="knop knop-stil" hidden>Afmelden</button>
+    </nav>
+  </header>
+
+  <main class="speelveld" id="speelveld">
+    <div class="scherm" id="scherm">
+      <canvas id="spel" width="320" height="192" role="img" aria-label="Het kantoor van Larixa Logistiek. Loop met de pijltjestoetsen, gebruik iets met E of de spatiebalk. Alles kan ook via het planbord en het handboek."></canvas>
+    </div>
+
+    <section class="aanmelden" id="aanmelden" hidden aria-labelledby="aanmelden-kop">
+      <div class="aanmelden-kaart">
+        <h1 id="aanmelden-kop">Je eerste werkdag bij Larixa</h1>
+        <p>Larixa Logistiek installeert servers nog met de hand. Jij gaat dat veranderen. Meld je aan met de klascode van je docent en je studentnummer.</p>
+        <form id="aanmeldformulier" novalidate>
+          <label for="klascode">Klascode</label>
+          <input id="klascode" name="klascode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" required>
+          <label for="studentnummer">Studentnummer</label>
+          <input id="studentnummer" name="studentnummer" autocomplete="off" inputmode="numeric" spellcheck="false" maxlength="20" required>
+          <p class="melding" id="aanmeld-melding" role="alert"></p>
+          <button type="submit" class="knop knop-hoofd">Aanmelden</button>
+        </form>
+        <p class="klein">We bewaren alleen je klascode, je studentnummer en je voortgang. Je docent ziet je voortgang.</p>
+        <p class="klein"><button type="button" class="link" id="info-zonder-login">Eerst lezen waar de cursus over gaat</button></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="voet" id="voet" hidden>
+    <div class="sleutel">
+      <span class="voet-label" id="sleutel-label">Je labsleutel</span>
+      <code id="labsleutel" aria-labelledby="sleutel-label"></code>
+      <button type="button" class="knop knop-klein" id="kopieer-sleutel">Kopiëren</button>
+    </div>
+    <p id="voortgang"></p>
+    <p class="hint" id="hint" aria-live="polite"></p>
+  </footer>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <dialog id="ticket" class="label" aria-labelledby="ticket-titel">
+    <div class="label-binnen" id="ticket-inhoud"></div>
+  </dialog>
+
+  <dialog id="planbord" class="bord" aria-labelledby="planbord-titel">
+    <div class="bord-binnen" id="planbord-inhoud"></div>
+  </dialog>
+
+  <dialog id="handboek" class="boek" aria-labelledby="handboek-titel">
+    <div class="boek-binnen" id="handboek-inhoud"></div>
+  </dialog>
+
+  <dialog id="spoorkeuze" class="label" aria-labelledby="spoor-titel">
+    <div class="label-binnen" id="spoor-inhoud"></div>
+  </dialog>
+
+  <dialog id="praat" class="praat" aria-labelledby="praat-naam">
+    <div class="praat-binnen" id="praat-inhoud"></div>
+  </dialog>
+
+  <noscript><p class="noscript">Dit spel heeft JavaScript nodig.</p></noscript>
+</body>
+</html>
