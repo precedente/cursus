@@ -1,0 +1,328 @@
+{
+  "over": {
+    "titel": "Over de cursus",
+    "intro": "In 9 weken leer je een serverinstallatie te automatiseren. Eerst doe je het met de hand, dan analyseer je het, daarna automatiseer en verbeter je het.",
+    "blokken": [
+      {
+        "kop": "Opleiding",
+        "alineas": [
+          "ICT system engineer, niveau 4 (kwalificatie 27016).",
+          "Werkproces P2-K1-W2 Automatiseert processen, uit kerntaak P2-K1 Ontwikkelt digitale informatievoorzieningen.",
+          "Doe je ICT support technician, niveau 3 (27015)? Dan doe je mee als verdieping. De cursus hoort dan niet bij je kwalificatie."
+        ]
+      },
+      {
+        "kop": "Examen",
+        "alineas": [
+          "Doe je niveau 4? Dan telt de beoordeling van deze cursus volledig mee voor het examen van kerntaak P2-K1."
+        ]
+      },
+      {
+        "kop": "Cursusduur",
+        "alineas": [
+          "9 weken, met 2 lessen van 2 uur per week. Samen zijn dat 18 lessen.",
+          "Je school plant de cursus in na de gezamenlijke start in het eerste halfjaar."
+        ]
+      },
+      {
+        "kop": "Voorkennis",
+        "lijst": [
+          "Je kent de basis van een scripttaal uit eerdere cursussen: variabelen, een keuze met if en een lus.",
+          "Je kunt commando's typen in een terminal of in PowerShell.",
+          "VMware hoef je nog niet te kennen. Je richt je lab in de eerste les in."
+        ]
+      },
+      {
+        "kop": "Wat je nodig hebt",
+        "lijst": [
+          "Een Windows-laptop met een 64-bit processor. Virtualisatie (Intel VT-x of AMD-V) staat aan in het BIOS.",
+          "Geheugen: 16 GB is fijn. Met 8 GB wordt het krap.",
+          "Vrije ruimte: 100 GB op een SSD. Minimaal 60 GB.",
+          "VMware Workstation Pro. Die is gratis.",
+          "Git en een code-editor, zoals VS Code.",
+          "Windows-spoor: ook de Windows ADK met Windows System Image Manager."
+        ]
+      },
+      {
+        "kop": "Je lab",
+        "tabel": {
+          "koppen": ["Server", "IP-adres", "Wat het is"],
+          "rijen": [
+            ["ctrl01", "192.168.150.10", "Ubuntu Server. Hiervandaan stuur je Ansible aan."],
+            ["web01", "192.168.150.21", "Ubuntu Server. De webserver van het Linux-spoor."],
+            ["web02", "192.168.150.22", "Ubuntu Server. Alleen voor de extra missie."],
+            ["win01", "192.168.150.31", "Windows Server 2025. De webserver van het Windows-spoor."]
+          ]
+        }
+      },
+      {
+        "kop": "Twee sporen",
+        "alineas": [
+          "Je kiest een platform. Beide sporen hebben dezelfde fases en dezelfde rubric.",
+          "Linux: Ubuntu Server, een autoinstall-bestand in YAML en een Ansible-playbook.",
+          "Windows: Windows Server, een antwoordbestand in XML en een PowerShell-script.",
+          "Doe je niveau 3? Kies dan het Linux-spoor. Een playbook lees je makkelijk."
+        ]
+      }
+    ],
+    "planning": {
+      "kop": "Planning",
+      "koppen": ["Week", "Fase", "Wat je doet", "Wat je inlevert"],
+      "rijen": [
+        ["1", "Met de hand", "Lab inrichten. Een server met de hand installeren en meten.", "Meetrapport 1"],
+        ["2", "Analyseren", "Theorie over processen, ITIL en lean. Je eigen installatie in kaart brengen.", "Procesanalyse (feedback)"],
+        ["3", "Automatiseren", "Onbemand installeren met autoinstall of een antwoordbestand.", "Werkend installatiebestand"],
+        ["4", "Automatiseren", "De eerste inrichting met een playbook of script. Variabelen en YAML of XML.", "Eerste werkende inrichting"],
+        ["5", "Automatiseren", "Voorwaarden, lussen en templates. Veilig werken met geheimen.", "Uitgebreide inrichting"],
+        ["6", "Automatiseren", "Installatie en inrichting in één keer. Demo aan medestudenten.", "Werkende kern (feedback)"],
+        ["7", "Verbeteren", "Herhaalbaarheid testen. Iemand heeft met de hand iets veranderd.", "Testverslag"],
+        ["8", "Verbeteren", "Tweede meting. README, lintcontrole en code nakijken in tweetallen.", "Meetrapport 2 en documentatie"],
+        ["9", "Opleveren", "Laatste verbeteringen. Demo aan de opdrachtgever en reflectie.", "Eindproduct (beoordeling)"]
+      ]
+    }
+  },
+  "theorie": {
+    "titel": "Theorie",
+    "intro": "Korte uitleg per fase. Lees een kaart als je hem nodig hebt.",
+    "kaarten": [
+      {
+        "id": "meten",
+        "fase": "hand",
+        "titel": "Meten is weten",
+        "alineas": [
+          "Je kunt een proces pas verbeteren als je weet hoe het nu gaat. Daarom meet je in week 1 drie dingen.",
+          "Doorlooptijd: hoe lang duurt het van start tot een werkende server? Stappen: wat doe je allemaal, ook opzoeken en wachten? Fouten: wat ging er mis, en hoeveel tijd kostte het herstel?",
+          "Schrijf het meteen op, niet achteraf. Achteraf vergeet je juist de kleine dingen."
+        ]
+      },
+      {
+        "id": "proces",
+        "fase": "analyseren",
+        "titel": "Wat is een proces?",
+        "alineas": [
+          "Een proces is een vaste reeks stappen die iets oplevert. Het heeft een begin, zoals de vraag 'we hebben een nieuwe server nodig'. En het heeft een eind: een werkende server.",
+          "Een goed proces gaat elke keer hetzelfde, wie het ook uitvoert. Bij Larixa hangt het nu af van wie de server installeert. Daarom worden geen twee servers hetzelfde."
+        ]
+      },
+      {
+        "id": "itil",
+        "fase": "analyseren",
+        "titel": "ITIL in het kort",
+        "alineas": [
+          "ITIL is een verzameling afspraken voor goed IT-beheer. Twee begrippen heb je in deze cursus nodig.",
+          "Een wijziging (change) is elke aanpassing aan de IT, zoals een nieuwe server.",
+          "Een standaardwijziging komt vaak voor, heeft weinig risico en gaat altijd op dezelfde manier. Een server die zichzelf opbouwt, maakt van 'nieuwe server' een standaardwijziging."
+        ]
+      },
+      {
+        "id": "lean",
+        "fase": "analyseren",
+        "titel": "Lean: waarde en verspilling",
+        "alineas": [
+          "Lean kijkt naar elke stap met één vraag: voegt dit waarde toe voor de klant? Zo niet, dan is het verspilling. Lean kent acht soorten verspilling."
+        ],
+        "lijst": [
+          "Wachten: de installatie loopt en jij kijkt naar een voortgangsbalk.",
+          "Fouten: een typefout in het IP-adres, dus alles opnieuw.",
+          "Overbewerking: dingen instellen die niemand nodig heeft.",
+          "Beweging: zoeken naar dat ene wachtwoord of die handleiding.",
+          "Transport: bestanden heen en weer kopiëren tussen machines.",
+          "Voorraad: een stapel tickets die blijft liggen.",
+          "Overproductie: vijf servers bouwen terwijl er één nodig is.",
+          "Onbenut talent: een beheerder die de hele middag op knoppen drukt."
+        ]
+      },
+      {
+        "id": "kiezen",
+        "fase": "analyseren",
+        "titel": "Wat automatiseer je wel en niet?",
+        "alineas": [
+          "Automatiseer stappen die vaak terugkomen, steeds hetzelfde gaan en waar makkelijk fouten in sluipen.",
+          "Automatiseer niet wat één keer gebeurt, of waar je steeds een afweging moet maken.",
+          "Twijfel je? Vergelijk de tijd die het automatiseren kost met de tijd die het je later bespaart."
+        ]
+      },
+      {
+        "id": "iac",
+        "fase": "automatiseren",
+        "titel": "Infrastructure as code",
+        "alineas": [
+          "Bij infrastructure as code beschrijf je in bestanden hoe een server eruit moet zien. Een tool zorgt dat de server zo wordt.",
+          "Je beschrijft wat je wilt, bijvoorbeeld 'nginx moet draaien'. De tool zoekt uit wat daarvoor nodig is.",
+          "De bestanden zet je in versiebeheer, net als code. Dan zie je wie wat veranderde, en bouw je een server altijd op dezelfde manier op."
+        ]
+      },
+      {
+        "id": "onbemand",
+        "fase": "automatiseren",
+        "titel": "Onbemand installeren",
+        "alineas": [
+          "Bij een onbemande installatie staan alle antwoorden al in een bestand.",
+          "Ubuntu leest een autoinstall-bestand in YAML. Windows leest een antwoordbestand in XML, met de naam Autounattend.xml.",
+          "Het installatieprogramma zoekt dat bestand zelf, bijvoorbeeld op een tweede cd. Daarna gaat de installatie zonder vragen."
+        ],
+        "links": [
+          { "tekst": "Ubuntu: Autoinstall quick start", "url": "https://canonical-subiquity.readthedocs-hosted.com/en/latest/howto/autoinstall-quickstart.html" },
+          { "tekst": "Microsoft Learn: een server instellen met antwoordbestanden", "url": "https://learn.microsoft.com/en-us/training/modules/perform-post-installation-configuration-of-windows-server/6-configure-server-with-answer-files" }
+        ]
+      },
+      {
+        "id": "dataformaten",
+        "fase": "automatiseren",
+        "titel": "YAML en XML",
+        "alineas": [
+          "YAML en XML zijn manieren om gegevens op te schrijven.",
+          "YAML werkt met inspringen: wat verder inspringt, hoort bij de regel erboven. Gebruik spaties, nooit tabs.",
+          "XML werkt met tags. Elke tag heeft een begin en een eind."
+        ],
+        "voorbeelden": [
+          { "label": "YAML", "code": "autoinstall:\n  version: 1\n  identity:\n    hostname: web01" },
+          { "label": "XML", "code": "<ComputerName>WIN01</ComputerName>" }
+        ]
+      },
+      {
+        "id": "basis",
+        "fase": "automatiseren",
+        "titel": "Variabelen, voorwaarden en lussen",
+        "alineas": [
+          "Een variabele is een naam voor een waarde, zoals je labsleutel. Verander je de waarde, dan verandert hij overal.",
+          "Met een voorwaarde doe je iets alleen als iets klopt. Met een lus doe je hetzelfde voor een hele lijst, bijvoorbeeld voor elke gebruiker."
+        ],
+        "voorbeelden": [
+          { "label": "Ansible", "code": "- name: Gebruikers aanmaken\n  ansible.builtin.user:\n    name: \"{{ item }}\"\n  loop: \"{{ gebruikers }}\"\n  when: maak_gebruikers" },
+          { "label": "PowerShell", "code": "foreach ($naam in $gebruikers) {\n    if (-not (Get-LocalUser $naam -ErrorAction SilentlyContinue)) {\n        New-LocalUser $naam -NoPassword\n    }\n}" }
+        ]
+      },
+      {
+        "id": "geheimen",
+        "fase": "automatiseren",
+        "titel": "Geheimen veilig bewaren",
+        "alineas": [
+          "Een wachtwoord in je code kan iedereen lezen die de code ziet, ook in versiebeheer.",
+          "In Ansible versleutel je een geheim met Ansible Vault, bijvoorbeeld met `ansible-vault encrypt_string`. In PowerShell vraag je een wachtwoord bij het uitvoeren, met `Read-Host -AsSecureString`.",
+          "Let op: een wachtwoord in een antwoordbestand is alleen versluierd, niet versleuteld. Iedereen kan het terugrekenen."
+        ]
+      },
+      {
+        "id": "idempotent",
+        "fase": "verbeteren",
+        "titel": "Idempotent: twee keer is één keer",
+        "alineas": [
+          "Een goede automatisering is idempotent. Draai je hem twee keer, dan is het resultaat hetzelfde als na één keer. De tweede keer verandert er niets meer.",
+          "Bij Ansible zie je dat aan changed=0 in de samenvatting. In PowerShell kijk je eerst of iets al bestaat, voordat je het aanmaakt."
+        ]
+      },
+      {
+        "id": "drift",
+        "fase": "verbeteren",
+        "titel": "Configuratiedrift",
+        "alineas": [
+          "Drift ontstaat als iemand een server met de hand aanpast. De server wijkt dan af van wat in je code staat.",
+          "Met infrastructure as code draai je je automatisering gewoon opnieuw. De server gaat dan terug naar de toestand die jij hebt beschreven.",
+          "Let op: je code herstelt alleen wat erin staat. Wat iemand toevoegt en jij niet beschrijft, blijft staan."
+        ]
+      },
+      {
+        "id": "vergelijken",
+        "fase": "verbeteren",
+        "titel": "Voor en na vergelijken",
+        "alineas": [
+          "Vergelijk alleen wat je op dezelfde manier hebt gemeten. Meet dus weer doorlooptijd, stappen en fouten, net als in week 1.",
+          "Reken de winst uit: (oude tijd − nieuwe tijd) ÷ oude tijd × 100%.",
+          "Vertel ook wat niet in minuten zit. Elke server is nu bijvoorbeeld precies hetzelfde."
+        ]
+      }
+    ]
+  },
+  "beoordeling": {
+    "titel": "Beoordeling",
+    "intro": "Je docent beoordeelt je eindproduct met de rubric in Canvas. Het spel telt niet mee voor je cijfer: je codes laten alleen zien hoe ver je bent.",
+    "eindproduct": {
+      "kop": "Dit lever je op",
+      "lijst": [
+        "Een meetrapport van de handmatige installatie: tijd, stappen en fouten.",
+        "Een procesanalyse: de processtappen, de verspilling en je keuze wat je automatiseert.",
+        "Je automatisering in versiebeheer: het installatiebestand en het playbook of script.",
+        "Een README: wat je automatisering doet, en hoe je haar start en aanpast.",
+        "Een testverslag: herhaalbaarheid, opnieuw opbouwen en de tweede meting.",
+        "Een demo van 5 tot 10 minuten voor de opdrachtgever, met de vergelijking voor en na."
+      ]
+    },
+    "norm": [
+      "Elk criterium heeft drie levels: Basis, Voldoende en Goed.",
+      "Niveau 4: Voldoende is de norm. Basis is dan nog niet genoeg.",
+      "Niveau 3: je werkt naar Basis toe. Lukt meer? Mooi, ga door.",
+      "Feedback krijg je in week 2 en week 6. De beoordeling is in week 9."
+    ],
+    "rubric": {
+      "kop": "Rubric",
+      "niveaus": ["Basis", "Voldoende", "Goed"],
+      "criteria": [
+        {
+          "naam": "Procesanalyse",
+          "levels": [
+            "Je beschrijft de stappen van je handmatige installatie.",
+            "Je brengt het proces in kaart, wijst verspilling aan en kiest met argumenten wat je automatiseert.",
+            "Je weegt alternatieven af en laat zien wat je keuze de opdrachtgever oplevert."
+          ]
+        },
+        {
+          "naam": "Werkende automatisering",
+          "levels": [
+            "Je server installeert zichzelf met een gegeven sjabloon.",
+            "Installatie en inrichting gaan helemaal automatisch.",
+            "Het werkt ook op een tweede server, en als er iets afwijkt."
+          ]
+        },
+        {
+          "naam": "Opbouw en conventies",
+          "levels": [
+            "Je bouwt verder op een gegeven playbook of script.",
+            "Je kiest zelf een opbouw met variabelen en herkenbare onderdelen. Je volgt de afspraken van je tool.",
+            "Je maakt herbruikbare onderdelen, zoals rollen, functies of templates. De lintcontrole geeft geen meldingen."
+          ]
+        },
+        {
+          "naam": "Basisconcepten en data",
+          "levels": [
+            "Je gebruikt variabelen en voert gegeven stappen uit.",
+            "Je gebruikt variabelen, voorwaarden en lussen. Je werkt foutloos met YAML of XML.",
+            "Je gebruikt templates of combineert gegevensbronnen, en legt uit waarom."
+          ]
+        },
+        {
+          "naam": "Testen en herhaalbaarheid",
+          "levels": [
+            "Je test of de server werkt.",
+            "Een tweede run verandert niets. Je bouwt de server opnieuw op, met hetzelfde resultaat.",
+            "Je herstelt configuratiedrift en laat dat zien met testresultaten."
+          ]
+        },
+        {
+          "naam": "Documentatie",
+          "levels": [
+            "Je schrijft een korte startinstructie.",
+            "Je README beschrijft het doel, het gebruik en de instellingen. Waar nodig staat commentaar in je code.",
+            "Een collega kan je automatisering zonder hulp gebruiken en aanpassen."
+          ]
+        },
+        {
+          "naam": "Veilig werken",
+          "levels": [
+            "Er staan geen leesbare wachtwoorden in je code.",
+            "Geheimen staan versleuteld of buiten je code, bijvoorbeeld in Ansible Vault.",
+            "Je benoemt de risico's van je automatisering en hoe je die beperkt."
+          ]
+        },
+        {
+          "naam": "Verbeteren en onderbouwen",
+          "levels": [
+            "Je laat zien dat je automatisering werkt.",
+            "Je vergelijkt voor en na, met je eigen metingen.",
+            "Je doet een onderbouwd verbetervoorstel aan de opdrachtgever."
+          ]
+        }
+      ]
+    }
+  }
+}
