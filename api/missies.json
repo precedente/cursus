@@ -41,6 +41,7 @@
       "soort": "lab",
       "titel": "Een server met de hand",
       "na": [],
+      "theorie": ["meten"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "Welkom bij Larixa! Fijn dat je er bent. We installeren servers nu nog met de hand. Dat duurt lang, en geen twee servers worden hetzelfde. Voordat we dat veranderen, wil ik weten hoe lang het nu duurt. Installeer één server met de hand. Houd bij hoeveel tijd het kost, welke stappen je zet en wat er misgaat.",
       "stappen": {
@@ -69,6 +70,7 @@
       "soort": "docent",
       "titel": "Meetrapport 1",
       "na": ["m1"],
+      "theorie": ["meten"],
       "bericht": "Hoe ging het? Ik ben benieuwd naar je cijfers. Zet je meetrapport in eJournal: hoe lang duurde het, welke stappen zette je en wat ging er mis? Dit is straks je vergelijking. Hoe eerlijker je nu meet, hoe mooier je verbetering later.",
       "stappen": {
         "alle": [
@@ -88,6 +90,7 @@
       "soort": "docent",
       "titel": "Waar gaat de tijd heen?",
       "na": ["m1"],
+      "theorie": ["proces", "itil", "lean", "kiezen"],
       "bericht": "Hoi, ik ben Noor. Ik let bij Larixa op hoe we werken. Samira zegt dat jij een server met de hand hebt geïnstalleerd. Mooi, want nu zien we waar de tijd heen gaat. Welke stappen voegen echt iets toe? En welke zijn wachten, zoeken of overdoen? Kom even bij me in de vergaderzaal.",
       "stappen": {
         "alle": [
@@ -107,6 +110,7 @@
       "soort": "lab",
       "titel": "Installeren zonder vragen",
       "na": ["m3"],
+      "theorie": ["iac", "onbemand", "dataformaten"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "Goed werk met de analyse. Nu doen we het echt anders. Een installatie mag geen vragen meer stellen. Alles wat jij de vorige keer intypte, staat straks in één bestand. Jij start de installatie, de server doet de rest. En jij haalt koffie.",
       "stappen": {
@@ -139,6 +143,7 @@
       "soort": "lab",
       "titel": "De eerste inrichting",
       "na": ["m4"],
+      "theorie": ["basis"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "De installatie gaat vanzelf. Maar een kale server doet nog niks. Planning wil een eigen webpagina. Richt de server in met code, niet met de hand. Dan kunnen we het morgen precies zo opnieuw doen.",
       "stappen": {
@@ -166,6 +171,7 @@
       "soort": "lab",
       "titel": "Op slot",
       "na": ["m5"],
+      "theorie": ["geheimen"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "De pagina draait. Nu de beveiliging nog. Ik wil een eigen account op de server, en alleen het verkeer dat echt nodig is. Breid je automatisering uit. En let op: geen wachtwoorden leesbaar in je code.",
       "stappen": {
@@ -193,6 +199,7 @@
       "soort": "lab",
       "titel": "Bouwt de server zichzelf op?",
       "na": ["m6"],
+      "theorie": ["idempotent"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "Tijd voor de echte test. Gooi je server weg en bouw hem opnieuw op. Installatie en inrichting in één keer, zonder dat jij iets met de hand doet. Lukt dat? Dan doen we het voortaan bij elke nieuwe server zo.",
       "stappen": {
@@ -219,6 +226,7 @@
       "soort": "lab",
       "titel": "Wie heeft hieraan gezeten?",
       "na": ["m7"],
+      "theorie": ["drift"],
       "server": { "linux": "web01", "windows": "win01" },
       "bericht": "Eh... hoi. Ik ben Ruben, van planning. Ik wilde gisteren even snel iets aanpassen op de webserver. Nu doet de pagina raar en Samira kijkt boos. Kun jij het terugzetten? Liefst voordat iemand het merkt.",
       "stappen": {
@@ -247,6 +255,7 @@
       "soort": "docent",
       "titel": "De tweede meting",
       "na": ["m8"],
+      "theorie": ["vergelijken"],
       "bericht": "Je server bouwt zichzelf op. Maar hoeveel sneller is het nu echt? Meet een volledige herbouw, net als in week 1. Dan leggen we de twee metingen naast elkaar.",
       "stappen": {
         "alle": [
@@ -267,6 +276,7 @@
       "soort": "docent",
       "titel": "De demo",
       "na": ["m9"],
+      "theorie": [],
       "bericht": "Het is zover. Laat mij en het team zien wat je hebt gebouwd. Vertel wat het Larixa oplevert, met je metingen erbij. Vijf tot tien minuten is genoeg. Ik zorg voor koffie.",
       "stappen": {
         "alle": [
@@ -289,6 +299,7 @@
       "sporen": ["linux"],
       "titel": "Nog een server",
       "na": ["m7"],
+      "theorie": [],
       "server": { "linux": "web02" },
       "bericht": "Planning is blij. Nu wil de klantenservice dezelfde pagina. Kun je een tweede server bouwen, met hetzelfde playbook? Dit is een extra missie. Je hebt hem niet nodig voor een voldoende.",
       "stappen": {
@@ -310,6 +321,7 @@
       "sporen": ["windows"],
       "titel": "Windows met Ansible",
       "na": ["m7"],
+      "theorie": [],
       "bericht": "Je PowerShell-script werkt. Kan Ansible dat ook, vanaf ctrl01? Dan beheren we Linux en Windows op één manier. Dit is een extra missie. Je hebt hem niet nodig voor een voldoende.",
       "stappen": {
         "alle": [

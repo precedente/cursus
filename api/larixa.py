@@ -37,6 +37,8 @@ from urllib.parse import urlparse
 HIER = Path(__file__).resolve().parent
 DATA = Path(os.environ.get("LARIXA_DATA", HIER.parent / "data"))
 MISSIES_PAD = Path(os.environ.get("LARIXA_MISSIES", HIER / "missies.json"))
+HANDBOEK_PAD = Path(os.environ.get("LARIXA_HANDBOEK", HIER.parent / "web" / "data" / "handboek.json"))
+GELEZEN = "theorie:"  # voorvoegsel in de tabel voltooid voor gelezen theoriekaarten
 
 # Tekens voor klascodes en labsleutels: zonder I, O, 0 en 1, die lijken op elkaar.
 ALFABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
@@ -125,13 +127,18 @@ def lees_token(geheim: bytes, token: str) -> dict | None:
 # ---------------------------------------------------------------------------
 
 
+def theoriekaarten(pad: Path = HANDBOEK_PAD) -> set[str]:
+    """De id's van de theoriekaarten in het handboek."""
+    return {k["id"] for k in json.loads(pad.read_text(encoding="utf-8"))["theorie"]["kaarten"]}
+
+
 def laad_missies(pad: Path = MISSIES_PAD) -> dict:
     data = json.loads(pad.read_text(encoding="utf-8"))
-    controleer_missies(data)
+    controleer_missies(data, theoriekaarten() if HANDBOEK_PAD.exists() else None)
     return data
 
 
-def controleer_missies(data: dict) -> None:
+def controleer_missies(data: dict, kaarten: set[str] | None = None) -> None:
     """Gooit een ValueError als missies.json niet klopt."""
     fases = {f["id"] for f in data["fases"]}
     personages = set(data["personages"])
@@ -155,6 +162,9 @@ def controleer_missies(data: dict) -> None:
         for n in m.get("na", []):
             if n not in ids:
                 fouten.append(f"{mid}: na verwijst naar onbekende missie {n}")
+        for k in m.get("theorie", []):
+            if kaarten is not None and k not in kaarten:
+                fouten.append(f"{mid}: theoriekaart {k} staat niet in het handboek")
         sporen = m.get("sporen", list(SPOREN))
         if not set(sporen) <= set(SPOREN):
             fouten.append(f"{mid}: onbekend spoor")
@@ -326,6 +336,9 @@ class App:
         self.data = missies
         self.missies = {m["id"]: m for m in missies["missies"]}
         self.badges = {b["id"]: b for b in missies["badges"]}
+        self.kaarten = {k for m in missies["missies"] for k in m.get("theorie", [])}
+        if HANDBOEK_PAD.exists():
+            self.kaarten |= theoriekaarten()
         self.rem_code = Rem(*REM_CODE)
         self.rem_aanmelden = Rem(*REM_AANMELDEN)
         self.rem_docent = Rem(*REM_DOCENT)
@@ -362,7 +375,18 @@ class App:
             "codeinstructie": self.data["codeinstructie"],
             "missies": missies,
             "badges": [dict(b, behaald=b["id"] in klaar_ids) for b in self.data["badges"]],
+            "gelezen": sorted(i[len(GELEZEN):] for i in klaar_ids if i.startswith(GELEZEN)),
         }
+
+    def markeer_gelezen(self, con, student, body):
+        kaart = str(body.get("kaart", ""))
+        if kaart not in self.kaarten:
+            raise Fout(HTTPStatus.NOT_FOUND, "Deze theoriekaart bestaat niet.")
+        con.execute(
+            "INSERT OR IGNORE INTO voltooid (student, item, door, tijd) VALUES (?, ?, 'gelezen', ?)",
+            (student["id"], GELEZEN + kaart, time.time()),
+        )
+        return self.student_status(con, student)
 
     def huidige_student(self, con: sqlite3.Connection, cookies: dict) -> sqlite3.Row:
         gegevens = lees_token(self.geheim, cookies.get("larixa", ""))
@@ -427,6 +451,8 @@ class App:
             raise Fout(HTTPStatus.CONFLICT, "Deze missie is nog niet open.")
         if status == "klaar":
             return {"goed": True, "bericht": missie.get("klaar", ""), **self.student_status(con, student)}
+        if any(GELEZEN + k not in klaar for k in missie.get("theorie", [])):
+            raise Fout(HTTPStatus.CONFLICT, "Lees eerst de theorie bij deze missie.")
         remsleutel = f"{student['klas']}|{student['studentnummer']}"
         wacht = self.rem_code.geblokkeerd(remsleutel)
         if wacht:
@@ -615,6 +641,9 @@ def maak_handler(app: App):
             if methode == "POST" and pad == "/api/code":
                 body = self.lees_body()
                 return app.controleer_code(con, app.huidige_student(con, c), body)
+            if methode == "POST" and pad == "/api/gelezen":
+                body = self.lees_body()
+                return app.markeer_gelezen(con, app.huidige_student(con, c), body)
             if methode == "POST" and pad == "/api/docent/inloggen":
                 return app.docent_inloggen(con, self.lees_body(), self.client_ip())
             if methode == "POST" and pad == "/api/docent/afmelden":

@@ -137,6 +137,14 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(status["m2"], "dicht")
         self.assertNotIn("z2", status, "z2 hoort bij het Windows-spoor")
         sleutel = data["student"]["labsleutel"]
+        self.assertEqual(data["gelezen"], [])
+
+        # Eerst de theorie lezen
+        self.assertEqual(c.post("/api/code", {"missie": "m1", "code": larixa.missiecode("m1", sleutel)})[0], 409)
+        self.assertEqual(c.post("/api/gelezen", {"kaart": "bestaat-niet"})[0], 404)
+        status, data = c.post("/api/gelezen", {"kaart": "meten"})
+        self.assertEqual(status, 200)
+        self.assertEqual(data["gelezen"], ["meten"])
 
         self.assertEqual(c.post("/api/code", {"missie": "m1", "code": "0000-0000"})[0], 400)
         self.assertEqual(c.post("/api/code", {"missie": "m4", "code": larixa.missiecode("m4", sleutel)})[0], 409)
@@ -152,10 +160,12 @@ class ApiTest(unittest.TestCase):
 
         # De code van een ander werkt niet.
         anders, data2 = self.nieuwe_student("100003")
+        anders.post("/api/gelezen", {"kaart": "meten"})
         self.assertEqual(anders.post("/api/code", {"missie": "m1", "code": larixa.missiecode("m1", sleutel)})[0], 400)
 
     def test_rem_op_raden(self):
         c, _ = self.nieuwe_student("100004")
+        c.post("/api/gelezen", {"kaart": "meten"})
         for _ in range(larixa.REM_CODE[0]):
             self.assertEqual(c.post("/api/code", {"missie": "m1", "code": "1111-1111"})[0], 400)
         self.assertEqual(c.post("/api/code", {"missie": "m1", "code": "1111-1111"})[0], 429)
@@ -170,6 +180,7 @@ class ApiTest(unittest.TestCase):
     def test_docent(self):
         leerling, data = self.nieuwe_student("100006")
         sleutel = data["student"]["labsleutel"]
+        leerling.post("/api/gelezen", {"kaart": "meten"})
         leerling.post("/api/code", {"missie": "m1", "code": larixa.missiecode("m1", sleutel)})
 
         d = Client(self.poort)

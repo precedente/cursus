@@ -131,6 +131,8 @@ function openDialoog(d) {
 
 const missies = () => spel.status?.missies || [];
 const missie = (id) => missies().find((m) => m.id === id);
+const gelezen = () => new Set(spel.status?.gelezen || []);
+const ongelezen = (m) => (m.theorie || []).filter((id) => !gelezen().has(id));
 const ruimteVanFase = (fase) => spel.status?.fases.find((f) => f.id === fase)?.ruimte || FASERUIMTE[fase];
 const fasenaam = (fase) => spel.status?.fases.find((f) => f.id === fase)?.naam || FASENAMEN[fase] || fase;
 
@@ -524,6 +526,7 @@ function praat(p) {
 function toonTicket(id) {
   const m = missie(id);
   if (!m) return;
+  if (m.status === "open" && ongelezen(m).length) return toonLeesEerst(m);
   const d = $("#ticket");
   const s = spel.status;
   const spoor = s.student.spoor;
@@ -615,7 +618,7 @@ function toonPlanbord() {
       el("strong", { tekst: m.titel }),
       el("span", { tekst: `${s.personages[m.van].naam.split(" ")[0]}, ${fasenaam(m.fase).toLowerCase()}${m.soort === "docent" ? ", je docent vinkt af" : ""}` })),
     el("span", { klasse: `status ${m.status}`, tekst: STATUSTEKST[m.status] }),
-    el("button", { type: "button", klasse: "knop knop-klein", disabled: m.status === "dicht", tekst: "Ticket openen", "aria-label": `Ticket openen: ${m.titel}`, onclick: () => { d.close(); toonTicket(m.id); } }));
+    el("button", { type: "button", klasse: "knop knop-klein", disabled: m.status === "dicht", tekst: m.status === "open" && ongelezen(m).length ? "Eerst theorie" : "Ticket openen", "aria-label": `Ticket openen: ${m.titel}`, onclick: () => { d.close(); toonTicket(m.id); } }));
   const hoofd = missies().filter((m) => !m.zij);
   const extra = missies().filter((m) => m.zij);
   const spoor = s.student.spoor;
@@ -699,14 +702,73 @@ function paneelTheorie(h) {
     el("p", { tekst: h.intro }),
     fases.map((f) => [
       el("h3", { klasse: `fase-kop fase-${f}`, id: `theorie-${f}`, tekst: fasenaam(f) }),
-      el("div", { klasse: "kaarten" }, h.kaarten.filter((k) => k.fase === f).map((k) => el("article", { klasse: "kaart" },
-        el("h4", { tekst: k.titel }),
-        k.alineas.map((a) => el("p", {}, rijk(a))),
-        k.lijst ? el("ul", {}, k.lijst.map((l) => el("li", {}, rijk(l)))) : null,
-        (k.voorbeelden || []).map((v) => [el("p", { klasse: "voorbeeld-label", tekst: v.label }), el("pre", {}, el("code", { tekst: v.code }))]),
-        (k.links || []).map((l) => el("p", {}, el("a", { href: l.url, target: "_blank", rel: "noopener", tekst: l.tekst })))))),
+      el("div", { klasse: "kaarten" }, h.kaarten.filter((k) => k.fase === f).map((k) => kaartElement(k))),
     ]),
   ];
+}
+
+// Een theoriekaart. Aangemelde studenten zien een knop om de kaart als gelezen te markeren.
+function kaartElement(k, naGelezen) {
+  const al = gelezen().has(k.id);
+  const knop = spel.status ? el("button", {
+    type: "button", klasse: `knop knop-klein ${al ? "" : "knop-hoofd"}`, disabled: al,
+    tekst: al ? "Gelezen" : "Ik heb dit gelezen",
+    onclick: async (ev) => {
+      const b = ev.currentTarget;
+      b.disabled = true;
+      try {
+        await markeerGelezen(k.id);
+        b.textContent = "Gelezen";
+        b.classList.remove("knop-hoofd");
+        b.closest(".kaart").classList.add("gelezen");
+        naGelezen?.();
+      } catch (f) {
+        if (f.status === 401) return toonAanmelden();
+        b.disabled = false;
+        toast(f.message);
+      }
+    },
+  }) : null;
+  return el("article", { klasse: `kaart ${al ? "gelezen" : ""}` },
+    el("h4", { tekst: k.titel }),
+    k.alineas.map((a) => el("p", {}, rijk(a))),
+    k.lijst ? el("ul", {}, k.lijst.map((l) => el("li", {}, rijk(l)))) : null,
+    (k.voorbeelden || []).map((v) => [el("p", { klasse: "voorbeeld-label", tekst: v.label }), el("pre", {}, el("code", { tekst: v.code }))]),
+    (k.links || []).map((l) => el("p", {}, el("a", { href: l.url, target: "_blank", rel: "noopener", tekst: l.tekst }))),
+    knop);
+}
+
+async function markeerGelezen(id) {
+  zetStatus(await api("/api/gelezen", { kaart: id }));
+}
+
+// Voor een open missie met ongelezen theorie: eerst lezen, dan pas het ticket.
+function toonLeesEerst(m) {
+  if (!spel.handboek) return toast("De theorie laadt nog. Probeer het zo opnieuw.");
+  const d = $("#ticket");
+  const persoon = spel.status.personages[m.van];
+  const kaarten = (m.theorie || []).map((id) => spel.handboek.theorie.kaarten.find((k) => k.id === id)).filter(Boolean);
+  const melding = el("p", { klasse: "melding", role: "status" });
+  const verder = el("button", { type: "button", klasse: "knop knop-hoofd", tekst: "Ticket openen", onclick: () => toonTicket(m.id) });
+  const bij = () => {
+    const n = ongelezen(m).length;
+    verder.disabled = n > 0;
+    melding.textContent = n ? `Nog ${n} ${n === 1 ? "kaart" : "kaarten"} te lezen.` : "Alles gelezen. Je kunt het ticket openen.";
+  };
+  vervang($("#ticket-inhoud"),
+    sluitknop(d),
+    el("header", { klasse: "label-kop" },
+      streepjescode(`theorie${m.id}`),
+      el("p", { klasse: "label-nr", tekst: `Ticket ${m.id.toUpperCase()}, eerst de theorie` }),
+      el("h2", { id: "ticket-titel", tekst: m.titel })),
+    el("div", { klasse: "bericht" }, portret(m.van), el("div", {},
+      el("p", { klasse: "wie", tekst: `${persoon.naam}, ${persoon.rol}` }),
+      el("p", { tekst: "Ik heb een ticket voor je. Lees eerst de theorie die erbij hoort. Klaar met een kaart? Klik op 'Ik heb dit gelezen'. Daarna opent het ticket." }))),
+    el("div", { klasse: "kaarten lees" }, kaarten.map((k) => kaartElement(k, bij))),
+    el("div", { klasse: "lees-verder" }, melding, verder));
+  bij();
+  openDialoog(d);
+  d.scrollTop = 0;
 }
 
 function paneelBeoordeling(h) {
