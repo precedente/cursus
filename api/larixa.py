@@ -19,6 +19,7 @@ import base64
 import getpass
 import hashlib
 import hmac
+import ipaddress
 import json
 import os
 import re
@@ -526,7 +527,8 @@ def maak_handler(app: App):
         def client_ip(self) -> str:
             ip = self.client_address[0]
             doorgestuurd = self.headers.get("X-Forwarded-For")
-            if doorgestuurd and ip in ("127.0.0.1", "::1"):
+            # Caddy staat op dezelfde machine of in Docker op het eigen netwerk: vertrouw dan zijn header.
+            if doorgestuurd and ipaddress.ip_address(ip).is_private:
                 return doorgestuurd.split(",")[-1].strip()
             return ip
 
