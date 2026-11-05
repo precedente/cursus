@@ -72,7 +72,16 @@ Zet het site-blok uit `deploy/Caddyfile` in de Caddyfile en herlaad Caddy (`sudo
 - Het spel opent, en aanmelden met de klascode werkt.
 - `/docent/` vraagt om het docentwachtwoord.
 
-**Bijwerken:** `cd /srv/cursus && sudo git pull`. Is er iets in `api/` veranderd, herstart dan de API: `sudo systemctl restart larixa-api`. Een herstart zet de rem op foute codes terug op nul; voortgang blijft bewaard.
+**Bijwerken:** de timer `cursus-update` kijkt elke minuut of er iets nieuws op GitHub staat. Hij haalt het op en herstart de API als er iets in `api/` veranderde. Aanzetten:
+
+```sh
+sudo cp /srv/cursus/deploy/cursus-update.service /srv/cursus/deploy/cursus-update.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now cursus-update.timer
+journalctl -u cursus-update -f      # meekijken
+```
+
+De server volgt de branch die op `/srv/cursus` is uitgecheckt. Een herstart van de API zet de rem op foute codes terug op nul; voortgang blijft bewaard.
 
 **Back-up:** maak een back-up van `/var/lib/larixa`. Zonder `geheim.key` veranderen alle labsleutels.
 

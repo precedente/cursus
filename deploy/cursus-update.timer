@@ -1,0 +1,9 @@
+[Unit]
+Description=Elke minuut kijken of er een nieuwe versie van de cursus is
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+
+[Install]
+WantedBy=timers.target
