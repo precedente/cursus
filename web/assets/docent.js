@@ -125,6 +125,7 @@ function teken() {
     el("th", { scope: "col", tekst: "Spoor" }),
     el("th", { scope: "col", tekst: "Laatst gezien" }),
     el("th", { scope: "col" }, el("abbr", { title: "Foute codes in de afgelopen 7 dagen", tekst: "Fout" })),
+    el("th", { scope: "col" }, el("abbr", { title: "Gelezen theoriekaarten", tekst: "Theorie" })),
     missies.map((m, i) => el("th", { scope: "col", klasse: i === 0 ? "scheiding" : "" },
       el("abbr", { title: `Week ${m.week}: ${m.titel}${m.soort === "docent" ? " (docent vinkt af)" : ""}`, tekst: m.id.toUpperCase() }))),
     badges.map((b, i) => el("th", { scope: "col", klasse: i === 0 ? "scheiding" : "" }, el("abbr", { title: b.uitleg, tekst: b.naam }))),
@@ -135,6 +136,7 @@ function teken() {
     el("td", { tekst: s.spoor || "nog niet" }),
     el("td", { tekst: wanneer(s.laatst_gezien) }),
     el("td", { tekst: String(s.foute_codes_week) }),
+    el("td", { tekst: String(Object.keys(s.voltooid).filter((k) => k.startsWith("theorie:")).length) }),
     missies.map((m, i) => {
       const status = s.status[m.id];
       const td = el("td", { klasse: i === 0 ? "scheiding" : "" });

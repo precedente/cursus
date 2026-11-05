@@ -440,6 +440,11 @@ dialog li code, dialog p code {
   font-size: 0.85rem;
   line-height: 1.4;
 }
+.kaart > .knop { margin-top: 0.6rem; }
+.kaart.gelezen { border-color: var(--lariks); background: #f6faf4; }
+.kaarten.lees { margin-top: 1rem; }
+.lees-verder { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-top: 1.25rem; }
+.lees-verder .melding { margin: 0; }
 .kaart .voorbeeld-label { margin: 0.6rem 0 0; color: var(--grijs); font-size: 0.8rem; font-weight: 700; }
 
 .fase-kop { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem !important; }
