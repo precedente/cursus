@@ -196,6 +196,20 @@ class ApiTest(unittest.TestCase):
 
         # Een student is geen docent.
         self.assertEqual(leerling.get("/api/docent/overzicht")[0], 401)
+        self.assertEqual(leerling.post("/api/docent/klas", {"naam": "Stiekem"})[0], 401)
+
+        # Klassen beheren
+        status, nieuw = d.post("/api/docent/klas", {"naam": "  4ICT-B   2026 "})
+        self.assertEqual(status, 200)
+        self.assertEqual(nieuw["naam"], "4ICT-B 2026")
+        self.assertRegex(nieuw["code"], r"^[A-HJ-NP-Z2-9]{6}$")
+        self.assertEqual(d.post("/api/docent/klas", {"naam": "4ICT-B 2026"})[0], 409)
+        self.assertEqual(d.post("/api/docent/klas", {"naam": ""})[0], 400)
+        nieuwe = Client(self.poort)
+        self.assertEqual(nieuwe.post("/api/aanmelden", {"klascode": nieuw["code"], "studentnummer": "900001"})[0], 200)
+        self.assertEqual(d.post("/api/docent/klas-open", {"klas": nieuw["code"], "open": False})[0], 200)
+        self.assertEqual(Client(self.poort).post("/api/aanmelden", {"klascode": nieuw["code"], "studentnummer": "900002"})[0], 403)
+        self.assertEqual(d.post("/api/docent/klas-open", {"klas": "ZZZZZZ", "open": True})[0], 404)
 
     def test_bestanden(self):
         c = Client(self.poort)

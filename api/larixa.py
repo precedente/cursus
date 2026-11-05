@@ -507,6 +507,23 @@ class App:
             con.execute("DELETE FROM voltooid WHERE student = ? AND item = ?", (student["id"], item))
         return {"ok": True}
 
+    def klas_toevoegen(self, con, body):
+        naam = " ".join(str(body.get("naam", "")).split())
+        if not 1 <= len(naam) <= 60:
+            raise Fout(HTTPStatus.BAD_REQUEST, "Geef de klas een naam van maximaal 60 tekens.")
+        if con.execute("SELECT 1 FROM klassen WHERE naam = ?", (naam,)).fetchone():
+            raise Fout(HTTPStatus.CONFLICT, "Er is al een klas met deze naam.")
+        code = nieuwe_klascode(con)
+        con.execute("INSERT INTO klassen (code, naam, aangemaakt) VALUES (?, ?, ?)", (code, naam, time.time()))
+        return {"ok": True, "code": code, "naam": naam}
+
+    def klas_open(self, con, body):
+        klas = con.execute("SELECT * FROM klassen WHERE code = ?", (str(body.get("klas", "")),)).fetchone()
+        if not klas:
+            raise Fout(HTTPStatus.NOT_FOUND, "Deze klas bestaat niet.")
+        con.execute("UPDATE klassen SET open = ? WHERE code = ?", (int(bool(body.get("open"))), klas["code"]))
+        return {"ok": True}
+
 
 def cookie(naam: str, waarde: str, duur: int) -> str:
     return f"{naam}={waarde}; Max-Age={duur}; Path=/api; HttpOnly; Secure; SameSite=Strict"
@@ -609,6 +626,14 @@ def maak_handler(app: App):
                 body = self.lees_body()
                 app.controleer_docent(con, c)
                 return app.afvinken(con, body)
+            if methode == "POST" and pad == "/api/docent/klas":
+                body = self.lees_body()
+                app.controleer_docent(con, c)
+                return app.klas_toevoegen(con, body)
+            if methode == "POST" and pad == "/api/docent/klas-open":
+                body = self.lees_body()
+                app.controleer_docent(con, c)
+                return app.klas_open(con, body)
             raise Fout(HTTPStatus.NOT_FOUND, "Onbekend adres.")
 
         def stuur_bestand(self):

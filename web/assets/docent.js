@@ -65,7 +65,42 @@ async function vink(klas, student, item, klaar, vraag) {
   }
 }
 
+async function zetOpen(klas, open) {
+  try {
+    await api("/api/docent/klas-open", { klas: klas.code, open });
+    await laad();
+  } catch (f) {
+    if (f.status === 401) return toonInloggen();
+    alert(f.message);
+  }
+}
+
+function tekenKlassen() {
+  const { klassen } = gegevens.overzicht;
+  if (!klassen.length) {
+    $("#klassen").replaceChildren(el("p", { tekst: "Nog geen klassen. Maak hieronder je eerste klas aan." }));
+    return;
+  }
+  $("#klassen").replaceChildren(el("div", { klasse: "tabel-wrap" }, el("table", { klasse: "klassen-tabel" },
+    el("thead", {}, el("tr", {},
+      ["Klas", "Klascode", "Studenten", "Aanmelden", ""].map((k) => el("th", { scope: "col", tekst: k })))),
+    el("tbody", {}, klassen.map((k) => el("tr", { klasse: k.code === gegevens.nieuw ? "nieuw" : "" },
+      el("th", { scope: "row", tekst: k.naam }),
+      el("td", {}, el("code", { klasse: "klascode", tekst: k.code }),
+        el("button", { type: "button", klasse: "knop knop-klein", tekst: "Kopiëren", "aria-label": `Klascode van ${k.naam} kopiëren`,
+          onclick: async (ev) => {
+            try { await navigator.clipboard.writeText(k.code); ev.target.textContent = "Gekopieerd"; } catch { ev.target.textContent = "Lukt niet"; }
+          } })),
+      el("td", { tekst: String(k.studenten.length) }),
+      el("td", { tekst: k.open ? "Open" : "Gesloten" }),
+      el("td", {}, el("button", { type: "button", klasse: "knop knop-klein",
+        tekst: k.open ? "Sluiten" : "Openen",
+        "aria-label": `${k.open ? "Aanmelden sluiten" : "Aanmelden openen"} voor ${k.naam}`,
+        onclick: () => zetOpen(k, !k.open) }))))))));
+}
+
 function teken() {
+  tekenKlassen();
   const { klassen, missies, badges } = gegevens.overzicht;
   $("#klaskeuze").replaceChildren(...klassen.map((k) => el("button", {
     type: "button", role: "tab", klasse: "knop", "aria-selected": String(k.code === gegevens.klas),
@@ -73,7 +108,7 @@ function teken() {
   })));
   const klas = klassen.find((k) => k.code === gegevens.klas);
   if (!klas) {
-    $("#klas").replaceChildren(el("p", {}, "Nog geen klassen. Maak er een op de server met ", el("code", { tekst: 'python3 larixa.py klas-toevoegen "4ICT-A"' }), "."));
+    $("#klas").replaceChildren(el("p", { tekst: "Zodra je een klas hebt, zie je hier de voortgang." }));
     return;
   }
 
@@ -169,6 +204,25 @@ $("#inlogformulier").addEventListener("submit", async (ev) => {
     $("#wachtwoord").value = "";
     await laad();
   } catch (f) {
+    melding.className = "melding fout";
+    melding.textContent = f.message;
+  }
+});
+$("#nieuwe-klas").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const melding = $("#klas-melding");
+  melding.className = "melding";
+  melding.textContent = "";
+  try {
+    const nieuw = await api("/api/docent/klas", { naam: $("#klasnaam").value });
+    $("#klasnaam").value = "";
+    gegevens.klas = nieuw.code;
+    gegevens.nieuw = nieuw.code;
+    await laad();
+    melding.className = "melding goed";
+    melding.textContent = `Klas ${nieuw.naam} aangemaakt. Geef je studenten de klascode ${nieuw.code}.`;
+  } catch (f) {
+    if (f.status === 401) return toonInloggen();
     melding.className = "melding fout";
     melding.textContent = f.message;
   }
